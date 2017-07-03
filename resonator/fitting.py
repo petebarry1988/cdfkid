@@ -175,7 +175,9 @@ def fitmags21(freq, s21, approxQr = 1.e5,  nonlinear=False, normalise=False, db=
 
     else:
         init = [freq[argmin(abs(s21))], approxQr/2, approxQr, 100., abs(s21).mean()]
-        s21fitp, s21cov = curve_fit(s21skewed, freq, abs(s21), p0=init)
+        param_bounds = (0, [np.inf]*5) # set the parameter bounds
+
+        s21fitp, s21cov = curve_fit(s21skewed, freq, abs(s21), p0=init, bounds = param_bounds)
         errs = np.sqrt(np.diag(s21cov))
         fits21 = s21skewed(freq, *s21fitp)
         a = 0.  # need to add error for a here
